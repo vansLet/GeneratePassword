@@ -59,14 +59,16 @@ namespace GeneratePassword.generate
             OptionGenerate[] optionGenerate = (options.Length > 0) ? options : new OptionGenerate[]{OptionGenerate.LowerCase,OptionGenerate.Numbers};
             var result = new StringBuilder(lenght);
             var unique_result = new SortedSet<string>();
-
+            var retry = 0;
             while(true)
             {
-                if(unique_result.Count == len) break;
-                unique_result.Add(RandomGenerate(optionGenerate));
+                if(unique_result.Count == len || retry == len) break;
+               var success = unique_result.Add(RandomGenerate(optionGenerate));
+
+               if (!success) ++retry ;
             }
 
-            unique_result.ToList().ForEach((unique) => result.Append(unique));
+            unique_result.Shuffle().ToList().ForEach((unique) => result.Append(unique));
             return result.ToString();
 
         }
