@@ -1,4 +1,5 @@
 using System.Text;
+using GeneratePassword.generate;
 
 namespace GeneratePassword.generate
 { 
@@ -39,7 +40,7 @@ namespace GeneratePassword.generate
         }
         public string Generate(int lenght, params OptionGenerate[] options)
         {
-            if (lenght > 40) throw new ApplicationException("password terlalu panjang");
+            if (lenght > 40) throw new ExceptionGenerate("lenght terlalu panjang");
 
             int len = (lenght > 5) ? lenght : 6;
             OptionGenerate[] optionGenerate = (options.Length > 0) ? options : new OptionGenerate[]{OptionGenerate.LowerCase,OptionGenerate.Numbers};
@@ -54,7 +55,7 @@ namespace GeneratePassword.generate
 
          public string GenerateUnique(int lenght, params OptionGenerate[] options)
         {
-            if (lenght > 40) throw new ApplicationException("password terlalu panjang");
+            if (lenght > 40) throw new ExceptionGenerate("lenght terlalu panjang");
             int len = (lenght > 5) ? lenght : 6;
             OptionGenerate[] optionGenerate = (options.Length > 0) ? options : new OptionGenerate[]{OptionGenerate.LowerCase,OptionGenerate.Numbers};
             var result = new StringBuilder(lenght);
@@ -73,6 +74,18 @@ namespace GeneratePassword.generate
 
         }
 
+        private static readonly GeneratePassword generatePassword = new();
 
+        public static string RandomPassword(int lenght, params OptionGenerate[] options)
+        {
+            
+            return generatePassword.Generate(lenght,options);
+        }
+
+        public static string RandomUniquePassword(int lenght, params OptionGenerate[] options)
+        {
+            return generatePassword.GenerateUnique(lenght,options);
+        }
+ 
     }
 }
